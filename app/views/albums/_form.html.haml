@@ -1,0 +1,43 @@
+= nested_form_for @album, html: { class: "form form-horizontal album", multipart: true } do |f|
+  .form-group
+    %span.error
+      = f.object.errors.messages[:base].first  rescue ""
+  .form-group
+    = f.label :title, class: 'control-label'
+    .controls
+      = f.text_field :title, class: 'form-control', required: true
+    = error_span(@album[:title])
+  .form-group
+    = f.label :description, class: 'control-label'
+    .controls
+      = f.text_field :description, class: 'form-control', required: true
+    = error_span(@album[:description])
+  .clear
+  .form-group
+    .col-md-9
+      %h3
+        Photos
+      - i = 0 
+      = f.fields_for :photos do |p|
+        = p.hidden_field :user_id, :value => current_user.id
+        .col-md-1
+          - i += 1
+          %i
+            = i 
+        .col-md-4
+          = p.text_field :title, :placeholder => "Photo Title"
+          %span.error
+            = p.object.errors.messages[:title].first
+        .col-md-6
+          = p.file_field :image
+          %span.error
+            = p.object.errors.messages[:image].first
+        .col-md-1
+          = p.link_to_remove "Remove"
+        .clear10
+    .col-md-9
+      %p
+        = f.link_to_add "Add a Photo", :photos
+  .clear
+  = f.submit nil,class: 'btn btn-primary'
+  = link_to t('.cancel', :default => t("helpers.links.cancel")), albums_path, :class => 'btn btn-default'

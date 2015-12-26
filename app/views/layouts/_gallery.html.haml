@@ -1,0 +1,14 @@
+- if photos.present?
+  - photos.each do |photo|
+    .col-md-4.portfolio-item
+      %h3
+        = photo.title
+      = link_to image_tag(photo.image.url(:medium)), photo.image.url, :target => "_blank"
+      - if params[:controller] == "home" and params[:action] == "index"
+        .clear10
+        %p
+          Submited By:
+          = photo.user.email rescue ""
+- else
+  %p 
+    No Photos Added !
